@@ -1,0 +1,145 @@
+@(message: String)
+
+@main("Welcome to Ravetree") {
+
+    <p style="text-align: center; font-weight: bold; font-size: xx-large">@message</p>
+    <br />
+    <p>Content-Type = application/json</p>
+    <table>
+        <tr>
+            <td style="font-weight: bold">
+                ACTION
+            </td>
+            <td style="font-weight: bold">
+                BODY
+            </td>
+            <td style="font-weight: bold" width="50%">
+                RETURN
+            </td>
+        </tr>
+
+        <tr>
+            <td valign="top" nowrap>
+                POST : /security/auth
+            </td>
+            <td valign="top">
+                {"id":"justjohnny&#64;test.com", "device":"576b9cdc-d3c3-4a3d-9689-8cd2a3e84442", "pass":"myPassword", "lang":"en"}<br />
+                <ul>
+                    <li>id : Users email address</li>
+                    <li>pass : Users Password</li>
+                    <li>device : A one time client generated UUID to identify the device being used.  Client application must generate ID and keep track of device ID.</li>
+                    <li>lang : Language of message to be returned.</li>
+                </ul>
+            </td>
+            <td valign="top">
+                {"tokenId":"bf8ff1ba-2bad-4190-8faa-348a46a7ef07", "userId":313, "email":"justjohnny&#64;test.com", "firstName":"Just", "lastName":"Johnny", "birthDate":"Oct 7, 1999", "errorMessage":null} <br />
+                <ul>
+                    <li>tokenId : UUID client must be used to execute addition API commands.  Every successfully executed API command will return a new tokenId.  Client application will need to keep track of the tokenId.</li>
+                    <li>errorMessage : Error message returned if login was not successful.</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top" nowrap>
+                POST : /security/logout
+            </td>
+            <td valign="top">
+                {"device":"576b9cdc-d3c3-4a3d-9689-8cd2a3e84442", "token":"a9ff6eaf-bf3b-429d-86f0-b4efdb8bdc6b"}<br />
+                <ul>
+                    <li>device : A one time client generated UUID to identify the device being used.</li>
+                    <li>tokenId : UUID client must be used to execute this API command.</li>
+                </ul>
+            </td>
+            <td valign="top">
+                Successful<br />
+                    OR <br />
+                Device Not Found
+            </td>
+        </tr>
+        <tr>
+            <td valign="top" nowrap>
+              POST : /security/register
+            </td>
+            <td valign="top">
+                {"device":"576b9cdc-d3c3-4a3d-9689-8cd2a3e84442", "firstName":"Just", "lastName":"Johnny", "email":"justjohnny&#64;test.com", "pass":"myPassword", "birthDate":"1999-10-07", "gender":"Male", "acceptTermsOfService":true, "lang":"en"} <br/>
+                <ul>
+                    <li>device : A one time client generated UUID to identify the device being used.  Client application must generate ID and keep track of device ID.</li>
+                    <li>firstName : Users first name.</li>
+                    <li>lastName : Users last name.</li>
+                    <li>email : Users email address.</li>
+                    <li>pass : Users password.</li>
+                    <li>birthDate : Users birth date.  Birth date must not be shown without users approval.</li>
+                    <li>gender : Users gender. Male or Female.</li>
+                    <li>acceptTermsOfService : Verify if userId accepted Terms Of Service. true or false</li>
+                    <li>lang : Language of message to be returned.</li>
+                </ul>
+            </td>
+            <td valign="top">
+                {"status":"Successful","messages":[]} <br />
+                    OR <br />
+                {"status":"Error", "messages":[{"parameter":"firstName","message":"No First Name was entered."}, {"parameter":"lastName","message":"No Last Name was entered."}, {"parameter":"email","message":"The Email address is invalid."}, {"parameter":"pass","message":"No Password was entered."}, {"parameter":"birthDate","message":"You must accept our terms and conditions."}]} <br />
+                <ul>
+                    <li>tokenId : UUID client must used to execute addition API commands.  Every successfully executed API command will return a new tokenId.  Client application will need to keep track of the tokenId.</li>
+                    <li>status : Status of users registration. Successful or Error</li>
+                    <li>errorMessage : Error message returned if registration was not successful.</li>
+                    <ul>
+                        <li>This email address has already been used.</li>
+                        <li>Unable to process registration.</li>
+                        <li>No First Name was entered.</li>
+                        <li>No Last Name was entered.</li>
+                        <li>No Email was entered.</li>
+                        <li>No Password was entered.</li>
+                        <li>No Birth date was entered.</li>
+                        <li>No Gender was entered.</li>
+                        <li>You must accept our terms and conditions.</li>
+                        <li>Passwords must be at least 6 characters.</li>
+                        <li>The Email address is invalid.</li>
+                    </ul>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top" nowrap>
+                POST : /security/forgotpassword
+            </td>
+            <td valign="top">
+                {"email":"justjohnny&#64;test.com", "lang":"en"}<br />
+                <ul>
+                    <li>email : Users email address.r</li>
+                    <li>lang : Language of message to be returned.</li>
+                </ul>
+
+            </td>
+            <td valign="top">
+                {"status":"Successful","messages":"We have emailed you a link to reset your password!"}<br />
+                <ul>
+                    <li>status: Status of forgot password. Successful or Error</li>
+                    <li>message: Message of forgot password status.</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top">GET : /posts/publicpost</td>
+            <td></td>
+            <td>{"total”:3, ”posts": [{"id":11, "linkId":1, "fileId":0, "photoId":0, "videoId":0, "folderId":0, "post":"&lt;a href="http://www.cnn.com/2012/09/12/world/africa/libya-us-ambassador-killed/index.html?hpt=hp_t1" target="blank"&gt; &lt;span class="bold"&gt;U.S. vows to hunt down perpetrators of Benghazi attack - CNN.com&lt;/span&gt; &lt;/a&gt; &lt;div class="lightest_gray_text"&gt;cnn.com&lt;/div&gt; &lt;div class="clear margin_top_5"&gt;The United States on Wednesday vowed to track down those behind the killings of its ambassador to Libya and three other Americans.&lt;/div&gt;", "postType":"link", "postOrigin":"feed", "postDate":1347499175000, "header":"", "postCategory":0, "anonymous":0},{"id":35, "linkId":7, "fileId":0, "photoId":0, "videoId":0, "folderId":0, "post":"&lt;a href="http://www.cnn.com/2012/09/28/health/brca-mastectomy/index.html" target="blank"&gt; &lt;span class="bold"&gt;My preventive mastectomy: Staying alive for my kids - CNN.com&lt;/span&gt; &lt;/a&gt; &lt;div class="lightest_gray_text"&Gt;cnn.com&lt;/div&gt; &lt;div class="clear margin_top_5"&gt;My children would tell you I don't bake cupcakes for their birthday parties. But I'd cut off my breasts for them -- and recently, I did.&lt;/div&gt;", "postType":"link", "postOrigin":"poster", "postDate":1348961332000, "header":"", "postCategory":0, "anonymous":0}, {"id":48, "linkId":18, "fileId":0, "photoId":0, "videoId":0, "folderId":0, "post":"&lt;a href="http://mashable.com/2012/09/30/facebook-children-advertising" target="blank"&gt; &lt;span class="bold"&gt;Facebook to FTC: Let Us Advertise to Children&lt;/span&gt; &lt;/a&gt; &lt;div class="lightest_gray_text"&gt;mashable.com&lt;/div&gt; &lt;div class="clear margin_top_5"&gt;Facebook wants the FTC to clarify proposed changes to COPPA, the Childrenâ€™s Online Privacy Protection Act.&lt;/div&gt;", "postType":"link", "postOrigin":"feed", "postDate":1349037692000, "header":"", "postCategory":0, "anonymous”:0}]}
+                <ul>
+                    <li>id : ID of post</li>
+                    <li>linkId : ID to link table</li>
+                    <li>fileId : ID to file table</li>
+                    <li>photoId : ID to photo table</li>
+                    <li>videoId : ID to video table</li>
+                    <li>folderId : ID to folder table</li>
+                    <li>post : Post message</li>
+                    <li>postType : Post type (Link, File, Photo, Video, Folder, Text)</li>
+                    <li>postOrigin : Origin where post was made</li>
+                    <li>postDate : Date of post</li>
+                    <li>header : Post Header</li>
+                    <li>postCategory : Post Category ID</li>
+                    <li>anonymous : Anonymous post indicator 1 = true</li>
+                </ul>
+            </td>
+        </tr>
+    </table>
+
+
+}

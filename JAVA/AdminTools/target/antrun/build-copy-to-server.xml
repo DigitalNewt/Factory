@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="maven-antrun-" default="copy-to-server"  >
+<target description="how to get antrun plugin to work with SCP and SSH" name="copy-to-server">
+  <echo message="Remember to fill empty fields..."/>
+  <scp todir="digitalnewt:kelsi01@admin.ravetree.com:~/" file="target/AdminTools.war" verbose="on" trust="true" failonerror="true" sftp="false"/>
+  <sshexec username="digitalnewt" host="admin.ravetree.com" trust="true" command="echo kelsi01| sudo -S cp ~/AdminTools.war /var/lib/tomcat7/webapps/." failonerror="true" password="kelsi01" timeout="120000"/>
+  <sshexec username="digitalnewt" host="admin.ravetree.com" trust="true" command="rm ~/AdminTools.war" failonerror="true" password="kelsi01" timeout="120000"/>
+  <taskdef classname="org.apache.tools.ant.taskdefs.optional.ssh.Scp" name="scp">
+    <classpath refid="maven.plugin.classpath"/>
+  </taskdef>
+</target>
+</project>
